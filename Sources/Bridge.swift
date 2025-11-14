@@ -13,10 +13,12 @@ import UIKit
 public typealias Image9 = NSImage
 public typealias Color9 = NSColor
 public typealias TableView9 = NSTableView
+public typealias ViewRepresentable9 = NSViewRepresentable
 #else
 public typealias Image9 = UIImage
 public typealias Color9 = UIColor
 public typealias TableView9 = UITableView
+public typealias ViewRepresentable9 = UIViewRepresentable
 #endif
 
 #if os(macOS)
