@@ -25,32 +25,36 @@ public struct MultiColumnList<Model: Identifiable, ItemView: View>: View {
         GeometryReader { g in
             ScrollView(showsIndicators: false) {
                 VStack {
-                    let widthWithoutPadding = g.size.width - itemPadding
-                    let itemWidthWithPadding = (maxItemWidth + itemPadding)
-                    let count = max(Int(floor(widthWithoutPadding / itemWidthWithPadding)), 1)
-                    let widthWithoutAllPaddings = g.size.width - itemPadding * CGFloat(count + 1)
-                    let itemWidth = widthWithoutAllPaddings / CGFloat(count)
-                    let array = model.chunked(into: count)
-
                     Spacer()
+                        .id(Edge.top)
                         .frame(height: 16)
-
-                    ForEach(array) { row in
-                        HStack(alignment: .top, spacing: itemPadding) {
-                            ForEach(row.array) { item in
-                                itemView(item, itemWidth)
+                    
+                    LazyVStack {
+                        let widthWithoutPadding = g.size.width - itemPadding
+                        let itemWidthWithPadding = (maxItemWidth + itemPadding)
+                        let count = max(Int(floor(widthWithoutPadding / itemWidthWithPadding)), 1)
+                        let widthWithoutAllPaddings = g.size.width - itemPadding * CGFloat(count + 1)
+                        let itemWidth = widthWithoutAllPaddings / CGFloat(count)
+                        let array = model.chunked(into: count)
+                        
+                        ForEach(array) { row in
+                            HStack(alignment: .top, spacing: itemPadding) {
+                                ForEach(row.array) { item in
+                                    itemView(item, itemWidth)
+                                }
+                                
+                                if row.array.count < count {
+                                    Spacer()
+                                }
                             }
-                            
-                            if row.array.count < count {
-                                Spacer()
-                            }
+                            .padding(.horizontal, itemPadding)
+                            .padding(.bottom, array.last != row ? 8 : 0)
                         }
-                        .padding(.horizontal, itemPadding)
-                        .padding(.bottom, array.last != row ? 8 : 0)
                     }
                     
                     Spacer()
                         .frame(height: bottomPadding)
+                        .id(Edge.bottom)
                 }
             }
         }
